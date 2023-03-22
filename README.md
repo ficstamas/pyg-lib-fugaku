@@ -15,56 +15,17 @@
 
 ## Installation
 
-We provide pre-built Python wheels for all major OS/PyTorch/CUDA combinations from Python 3.7 till 3.11, see [here](https://data.pyg.org/whl).
-Note that currently, Windows wheels are not supported (we are working on fixing this as soon as possible).
-
-To install the wheels, simply run
-
-```
-pip install pyg-lib -f https://data.pyg.org/whl/torch-${TORCH}+${CUDA}.html
+```shell
+CC="fcc -Nclang -Knolargepage" CXX="FCC -Nclang -Knolargepage" LC_ALL=C pip install git+https://github.com/ficstamas/pyg-lib-fugaku.git
 ```
 
-where
+You can also set:
+- `FVENV_PATH`: Absolute path to the directory which contains your virtual environment (Default: `/local`) 
+- `FVENV_NAME`: Name of your environment (Default: `venv`)
+- `FVENV_PYTHON`: Python version (Default: `python3.9`)
 
-* `${TORCH}` should be replaced by either `1.11.0`, `1.12.0`, `1.13.0` or `2.0.0`
-* `${CUDA}` should be replaced by either `cpu`, `cu102`, `cu113`, `cu115`, `cu116`, `cu117` or `cu118`
-
-The following combinations are supported:
-
-| PyTorch 2.0  | `cpu` | `cu102` | `cu113` | `cu115` | `cu116` | `cu117` | `cu118` |
-|--------------|-------|---------|---------|---------|---------|---------|---------|
-| **Linux**    | ✅    |         |         |         |         | ✅      | ✅      |
-| **Windows**  |       |         |         |         |         |         |         |
-| **macOS**    | ✅    |         |         |         |         |         |         |
-
-| PyTorch 1.13 | `cpu` | `cu102` | `cu113` | `cu115` | `cu116` | `cu117` | `cu118` |
-|--------------|-------|---------|---------|---------|---------|---------|---------|
-| **Linux**    | ✅    |         |         |         | ✅      | ✅      |         |
-| **Windows**  |       |         |         |         |         |         |         |
-| **macOS**    | ✅    |         |         |         |         |         |         |
-
-| PyTorch 1.12 | `cpu` | `cu102` | `cu113` | `cu115` | `cu116` | `cu117` | `cu118` |
-|--------------|-------|---------|---------|---------|---------|---------|---------|
-| **Linux**    | ✅    | ✅      | ✅      |         | ✅      |         |         |
-| **Windows**  |       |         |         |         |         |         |         |
-| **macOS**    | ✅    |         |         |         |         |         |         |
-
-| PyTorch 1.11 | `cpu` | `cu102` | `cu113` | `cu115` | `cu116` | `cu117` | `cu118` |
-|--------------|-------|---------|---------|---------|---------|---------|---------|
-| **Linux**    | ✅    | ✅      | ✅      | ✅      |         |         |         |
-| **Windows**  |       |         |         |         |         |         |         |
-| **macOS**    | ✅    |         |         |         |         |         |         |
-
-### Form nightly
-
-Nightly wheels are provided for Linux from Python 3.7 till 3.11:
+These variables are required to locate `torch` in the following manner:
 
 ```
-pip install pyg-lib -f https://data.pyg.org/whl/nightly/torch-${TORCH}+${CUDA}.html
-```
-
-### From master
-
-```
-pip install git+https://github.com/pyg-team/pyg-lib.git
+${FVENV_PATH}/${FVENV_NAME}/lib/${FVENV_PYTHON}/site-packages/torch/share/cmake/Torch/
 ```

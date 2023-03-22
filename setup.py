@@ -54,6 +54,10 @@ class CMakeBuild(build_ext):
         WITH_CUDA = torch.cuda.is_available()
         WITH_CUDA = bool(int(os.getenv('FORCE_CUDA', WITH_CUDA)))
 
+        # -DCMAKE_FIND_ROOT_PATH=/local/ -DCMAKE_PREFIX_PATH=/local/venv/lib/python3.9/site-packages/torch/share/cmake/Torch/
+        venv_path = os.getenv('FVENV_PATH', '/local')
+        venv_name = os.getenv('FVENV_NAME', 'venv')
+        venv_python_version = os.getenv('FVENV_PYTHON', 'python3.9')
         cmake_args = [
             '-DBUILD_TEST=OFF',
             '-DBUILD_BENCHMARK=OFF',
@@ -61,7 +65,8 @@ class CMakeBuild(build_ext):
             f'-DWITH_CUDA={"ON" if WITH_CUDA else "OFF"}',
             f'-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}',
             f'-DCMAKE_BUILD_TYPE={self.build_type}',
-            f'-DCMAKE_PREFIX_PATH={torch.utils.cmake_prefix_path}',
+            f'-DCMAKE_FIND_ROOT_PATH={venv_path}/'
+            f'-DCMAKE_PREFIX_PATH={venv_path}/{venv_name}/lib/{venv_python_version}/site-packages/torch/share/cmake/Torch/',
         ]
 
         if CMakeBuild.check_env_flag('USE_MKL_BLAS'):
