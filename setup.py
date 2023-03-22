@@ -65,7 +65,7 @@ class CMakeBuild(build_ext):
             f'-DWITH_CUDA={"ON" if WITH_CUDA else "OFF"}',
             f'-DCMAKE_LIBRARY_OUTPUT_DIRECTORY={extdir}',
             f'-DCMAKE_BUILD_TYPE={self.build_type}',
-            f'-DCMAKE_FIND_ROOT_PATH={venv_path}/'
+            f'-DCMAKE_FIND_ROOT_PATH={venv_path}/',
             f'-DCMAKE_PREFIX_PATH={venv_path}/{venv_name}/lib/{venv_python_version}/site-packages/torch/share/cmake/Torch/',
         ]
 
