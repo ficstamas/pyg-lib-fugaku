@@ -85,9 +85,9 @@ class CMakeBuild(build_ext):
         build_args = []
 
         subprocess.check_call(['cmake', ext.sourcedir] + cmake_args,
-                              cwd=os.path.join(venv_path, ".tmp/"))
+                              cwd=self.build_temp)
         subprocess.check_call(['cmake', '--build', '.'] + build_args,
-                              cwd=os.path.join(venv_path, ".tmp/"))
+                              cwd=self.build_temp)
 
 
 def maybe_append_with_mkl(dependencies):
