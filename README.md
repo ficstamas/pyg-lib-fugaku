@@ -21,5 +21,5 @@ Clone the repository to `/local/` and install it locally, otherwise `pip` clones
 
 ```shell
 git clone --recurse-submodules git@github.com:ficstamas/pyg-lib-fugaku.git /local/.tmp/pyg-lib
-CC="fcc -Nclang -Knolargepage" CXX="FCC -Nclang -Knolargepage" LC_ALL=C pip install /local/.tmp/pyg-lib
+CC="fcc -Nclang -Knolargepage,openmp,fast" CXX="FCC -Nclang -Knolargepage,openmp,fast" LC_ALL=C pip install --verbose -I /local/.tmp/pyg-lib
 ```
