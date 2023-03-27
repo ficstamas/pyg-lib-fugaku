@@ -31,26 +31,8 @@ if (USE_PYTHON)
   find_package(Python3 REQUIRED COMPONENTS Development)
 endif()
 
-if(WITH_CUDA)
-  enable_language(CUDA)
-  add_definitions(-DWITH_CUDA)
-  set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} --expt-relaxed-constexpr")
-
-  if (NOT "$ENV{EXTERNAL_CUTLASS_INCLUDE_DIR}" STREQUAL "")
-    include_directories($ENV{EXTERNAL_CUTLASS_INCLUDE_DIR})
-  else()
-    set(CUTLASS_DIR third_party/cutlass/include)
-    include_directories(${CUTLASS_DIR})
-    set(CUTLASS_UTIL_DIR third_party/cutlass/tools/util/include)
-    include_directories(${CUTLASS_UTIL_DIR})
-  endif()
-endif()
-
 set(CSRC pyg_lib/csrc)
 file(GLOB_RECURSE ALL_SOURCES ${CSRC}/*.cpp)
-if (WITH_CUDA)
-  file(GLOB_RECURSE ALL_SOURCES ${ALL_SOURCES} ${CSRC}/*.cu)
-endif()
 file(GLOB_RECURSE ALL_HEADERS ${CSRC}/*.h)
 add_library(${PROJECT_NAME} SHARED ${ALL_SOURCES})
 target_include_directories(${PROJECT_NAME} PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -79,28 +61,10 @@ endif()
 
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
 
-if(BUILD_TEST)
-  if(WITH_COV)
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} --coverage")
-  endif()
-  include(cmake/test.cmake)
-endif()
-
 message("-- CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 message("-- CMAKE_CXX_FLAGS_DEBUG: ${CMAKE_CXX_FLAGS_DEBUG}")
 message("-- CMAKE_CXX_FLAGS_RELEASE: ${CMAKE_CXX_FLAGS_RELEASE}")
 
-if(BUILD_BENCHMARK)
-  set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE INTERNAL "Disable benchmarking tool tests")
-  set(COMPILE_HAVE_GNU_POSIX_REGEX OFF CACHE INTERNAL "Disable GNU POSIX regex compilation check")
-  include(cmake/benchmark.cmake)
-endif()
-
 set_target_properties(${PROJECT_NAME} PROPERTIES
   EXPORT_NAME PyG
   INSTALL_RPATH ${TORCH_INSTALL_PREFIX}/lib)
-
-# Cmake creates *.dylib by default, but python expects *.so by default
-if (APPLE)
-  set_property(TARGET ${PROJECT_NAME} PROPERTY SUFFIX .so)
-endif()
